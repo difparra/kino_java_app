@@ -15,8 +15,11 @@ import com.diegoparra.kinoapp.databinding.FragmentMoviesBinding;
 import com.diegoparra.kinoapp.model.Movie;
 import com.diegoparra.kinoapp.utils.ListUtils;
 import com.diegoparra.kinoapp.viewmodel.MoviesViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -25,6 +28,7 @@ public class MoviesFragment extends Fragment {
 
     private MoviesViewModel viewModel;
     private FragmentMoviesBinding binding;
+    private MoviesAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,20 +45,40 @@ public class MoviesFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        adapter = new MoviesAdapter(new MoviesAdapter.OnClickListener() {
+            @Override
+            public void onItemClick(String movieId) {
+                Snackbar.make(binding.getRoot(), "Movie id: " + movieId + " pressed.", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        binding.moviesList.setAdapter(adapter);
+
+        subscribeUi();
+    }
+
+    private void subscribeUi() {
         viewModel.getMovies().observe(getViewLifecycleOwner(), new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-                String str = ListUtils.joinToString(movies, Movie::getTitle, "\n");
-                binding.txtMovies.setText(str);
+                adapter.submitList(movies);
             }
         });
         viewModel.getFailure().observe(getViewLifecycleOwner(), new Observer<Throwable>() {
             @Override
             public void onChanged(Throwable throwable) {
-                binding.txtMovies.setText(throwable.getMessage());
+                adapter.submitList(Collections.emptyList());
+
+                String errorMessage;
+                if (throwable.getMessage() != null) {
+                    errorMessage = throwable.getMessage();
+                } else {
+                    errorMessage = "Some failure has happened.";
+                }
+                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
     }
+
 
     @Override
     public void onDestroyView() {

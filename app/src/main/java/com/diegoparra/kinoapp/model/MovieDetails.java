@@ -7,9 +7,9 @@ public class MovieDetails {
 
     private final String id;
     private final List<Genre> genres;
-    private final String originalLanguage;
-    private final String originalTitle;
-    private final String imageUrl;
+    private final String language;
+    private final String title;
+    private final String backdropUrl;
     private final String overview;
     private final LocalDate releaseDate;
     private final int runtime;
@@ -20,12 +20,12 @@ public class MovieDetails {
     private final List<Review> reviews;
 
 
-    public MovieDetails(String id, List<Genre> genres, String originalLanguage, String originalTitle, String imageUrl, String overview, LocalDate releaseDate, int runtime, float rating, People director, List<People> cast, List<Movie> suggestions, List<Review> reviews) {
+    public MovieDetails(String id, List<Genre> genres, String language, String title, String backdropUrl, String overview, LocalDate releaseDate, int runtime, float rating, People director, List<People> cast, List<Movie> suggestions, List<Review> reviews) {
         this.id = id;
         this.genres = genres;
-        this.originalLanguage = originalLanguage;
-        this.originalTitle = originalTitle;
-        this.imageUrl = imageUrl;
+        this.language = language;
+        this.title = title;
+        this.backdropUrl = backdropUrl;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.runtime = runtime;
@@ -44,16 +44,16 @@ public class MovieDetails {
         return genres;
     }
 
-    public String getOriginalLanguage() {
-        return originalLanguage;
+    public String getLanguage() {
+        return language;
     }
 
-    public String getOriginalTitle() {
-        return originalTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getBackdropUrl() {
+        return backdropUrl;
     }
 
     public String getOverview() {
