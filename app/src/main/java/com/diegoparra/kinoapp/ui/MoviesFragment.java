@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.diegoparra.kinoapp.databinding.FragmentMoviesBinding;
 import com.diegoparra.kinoapp.model.Movie;
@@ -48,7 +50,8 @@ public class MoviesFragment extends Fragment {
         adapter = new MoviesAdapter(new MoviesAdapter.OnClickListener() {
             @Override
             public void onItemClick(String movieId) {
-                Snackbar.make(binding.getRoot(), "Movie id: " + movieId + " pressed.", Snackbar.LENGTH_SHORT).show();
+                NavDirections navDirections = MoviesFragmentDirections.actionGlobalMovieDetailsFragment(movieId);
+                NavHostFragment.findNavController(MoviesFragment.this).navigate(navDirections);
             }
         });
         binding.moviesList.setAdapter(adapter);

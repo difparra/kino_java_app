@@ -2,14 +2,12 @@ package com.diegoparra.kinoapp.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 import com.diegoparra.kinoapp.data.MoviesRepository;
-import com.diegoparra.kinoapp.model.Movie;
-import com.diegoparra.kinoapp.utils.Event;
+import com.diegoparra.kinoapp.model.MovieDetails;
 import com.diegoparra.kinoapp.utils.UiState;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,26 +20,28 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @HiltViewModel
-public class MoviesViewModel extends ViewModel {
+public class MovieDetailsViewModel extends ViewModel {
 
-    private final MoviesRepository moviesRepo;
+    private final String id;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final MoviesRepository moviesRepository;
     private final MutableLiveData<UiState> _uiState = new MutableLiveData<>();
-    private final MutableLiveData<List<Movie>> _movies = new MutableLiveData<>();
+    private final MutableLiveData<MovieDetails> _movieDetails = new MutableLiveData<>();
     private final MutableLiveData<Throwable> _failure = new MutableLiveData<>();
 
 
     @Inject
-    public MoviesViewModel(MoviesRepository moviesRepo) {
-        this.moviesRepo = moviesRepo;
-        subscribeMovieList();
+    public MovieDetailsViewModel(MoviesRepository moviesRepository, SavedStateHandle savedStateHandle) {
+        this.moviesRepository = moviesRepository;
+        this.id = savedStateHandle.get("movie_id");
+        subscribeMovieDetails();
     }
 
-    private void subscribeMovieList() {
-        moviesRepo.getMovies()
+    private void subscribeMovieDetails() {
+        moviesRepository.getMovieDetails(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Movie>>() {
+                .subscribe(new Observer<MovieDetails>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                         compositeDisposable.add(d);
@@ -49,8 +49,8 @@ public class MoviesViewModel extends ViewModel {
                     }
 
                     @Override
-                    public void onNext(@NonNull List<Movie> movies) {
-                        _movies.setValue(movies);
+                    public void onNext(@NonNull MovieDetails movieDetails) {
+                        _movieDetails.setValue(movieDetails);
                         _uiState.setValue(UiState.SUCCESS);
                     }
 
@@ -66,12 +66,13 @@ public class MoviesViewModel extends ViewModel {
                 });
     }
 
+
     public LiveData<UiState> getUiState() {
         return _uiState;
     }
 
-    public LiveData<List<Movie>> getMovies() {
-        return _movies;
+    public LiveData<MovieDetails> getMovieDetails() {
+        return _movieDetails;
     }
 
     public LiveData<Throwable> getFailure() {

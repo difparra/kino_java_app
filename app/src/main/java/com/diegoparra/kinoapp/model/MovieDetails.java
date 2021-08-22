@@ -12,8 +12,8 @@ public class MovieDetails {
     private final String backdropUrl;
     private final String overview;
     private final LocalDate releaseDate;
-    private final int runtime;
-    private final float rating;
+    private final int runtime;          //  Runtime in minutes
+    private final float rating;         //  Rating over 10.0f
     private final People director;
     private final List<People> cast;
     private final List<Movie> suggestions;
