@@ -1,14 +1,12 @@
 package com.diegoparra.kinoapp.data.network;
 
-import com.diegoparra.kinoapp.model.Movie;
 import com.google.gson.annotations.SerializedName;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class MovieDto {
 
-    private static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+    public static final String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
     private final String id;
     @SerializedName("genre_ids")
@@ -37,22 +35,35 @@ public class MovieDto {
         this.rating = rating;
     }
 
+    public String getId() {
+        return id;
+    }
 
-    public Movie toDomainModel() {
-        String title;
-        if (originalLanguage.equals("en")) {
-            title = originalTitle;
-        } else {
-            title = this.title;
-        }
-        String imageUrl = IMAGE_BASE_URL + posterPath;
-        return new Movie(
-                id,
-                genreIds,
-                imageUrl,
-                title,
-                rating,
-                LocalDate.parse(releaseDate)
-        );
+    public List<String> getGenreIds() {
+        return genreIds;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public float getRating() {
+        return rating;
     }
 }

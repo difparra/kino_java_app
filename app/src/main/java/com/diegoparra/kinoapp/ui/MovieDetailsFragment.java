@@ -15,10 +15,13 @@ import com.bumptech.glide.Glide;
 import com.diegoparra.kinoapp.databinding.FragmentMovieDetailsBinding;
 import com.diegoparra.kinoapp.model.Genre;
 import com.diegoparra.kinoapp.model.MovieDetails;
+import com.diegoparra.kinoapp.utils.Event;
 import com.diegoparra.kinoapp.utils.ListUtils;
 import com.diegoparra.kinoapp.viewmodel.MovieDetailsViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -56,6 +59,16 @@ public class MovieDetailsFragment extends Fragment {
                 binding.overview.setText(movieDetails.getOverview());
             }
         });
+        viewModel.getFailure().observe(getViewLifecycleOwner(), new Observer<Event<Throwable>>() {
+            @Override
+            public void onChanged(Event<Throwable> throwableEvent) {
+                Throwable failure = throwableEvent.getContentIfNotHandled();
+                if(failure!=null) {
+                    String errorMessage = (failure.getMessage() != null) ? failure.getMessage() : "Some failure has happened";
+                    Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void setRating(float rating) {
@@ -67,12 +80,7 @@ public class MovieDetailsFragment extends Fragment {
         String year = String.valueOf(releaseDate.getYear());
         int hours = runtimeMinutes / 60;
         int minutes = runtimeMinutes % 60;
-        String runtime;
-        if(hours > 0) {
-            runtime = hours + "h " + minutes + "m";
-        }else {
-            runtime = minutes + "m";
-        }
+        String runtime = ((hours > 0) ? hours + "h " : "") + minutes + "m";
         String genresString = ListUtils.joinToString(genres, Genre::getName, ", ");
         return year + " • " + runtime + " • " + genresString;
     }

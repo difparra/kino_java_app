@@ -15,13 +15,12 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.diegoparra.kinoapp.databinding.FragmentMoviesBinding;
 import com.diegoparra.kinoapp.model.Movie;
-import com.diegoparra.kinoapp.utils.ListUtils;
+import com.diegoparra.kinoapp.utils.Event;
 import com.diegoparra.kinoapp.viewmodel.MoviesViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -67,18 +66,16 @@ public class MoviesFragment extends Fragment {
                 adapter.submitList(movies);
             }
         });
-        viewModel.getFailure().observe(getViewLifecycleOwner(), new Observer<Throwable>() {
+        viewModel.getFailure().observe(getViewLifecycleOwner(), new Observer<Event<Throwable>>() {
             @Override
-            public void onChanged(Throwable throwable) {
+            public void onChanged(Event<Throwable> throwableEvent) {
                 adapter.submitList(Collections.emptyList());
 
-                String errorMessage;
-                if (throwable.getMessage() != null) {
-                    errorMessage = throwable.getMessage();
-                } else {
-                    errorMessage = "Some failure has happened.";
+                Throwable failure = throwableEvent.getContentIfNotHandled();
+                if(failure!=null) {
+                    String errorMessage = (failure.getMessage() != null) ? failure.getMessage() : "Some failure has happened";
+                    Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
                 }
-                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
             }
         });
     }

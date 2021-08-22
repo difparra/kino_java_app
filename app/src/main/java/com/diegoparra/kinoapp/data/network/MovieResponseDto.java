@@ -21,8 +21,7 @@ public class MovieResponseDto {
         this.totalResults = totalResults;
     }
 
-    public List<Movie> toDomainMovieList() {
-        return ListUtils.map(results, (Function<MovieDto, Movie>) MovieDto::toDomainModel);
+    public List<MovieDto> getResults() {
+        return results;
     }
-
 }

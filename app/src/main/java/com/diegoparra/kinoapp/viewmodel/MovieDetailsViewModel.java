@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.diegoparra.kinoapp.data.MoviesRepository;
 import com.diegoparra.kinoapp.model.MovieDetails;
+import com.diegoparra.kinoapp.utils.Event;
 import com.diegoparra.kinoapp.utils.UiState;
 
 import javax.inject.Inject;
@@ -27,7 +28,7 @@ public class MovieDetailsViewModel extends ViewModel {
     private final MoviesRepository moviesRepository;
     private final MutableLiveData<UiState> _uiState = new MutableLiveData<>();
     private final MutableLiveData<MovieDetails> _movieDetails = new MutableLiveData<>();
-    private final MutableLiveData<Throwable> _failure = new MutableLiveData<>();
+    private final MutableLiveData<Event<Throwable>> _failure = new MutableLiveData<>();
 
 
     @Inject
@@ -51,13 +52,13 @@ public class MovieDetailsViewModel extends ViewModel {
                     @Override
                     public void onNext(@NonNull MovieDetails movieDetails) {
                         _movieDetails.setValue(movieDetails);
-                        _uiState.setValue(UiState.SUCCESS);
+                        _uiState.postValue(UiState.SUCCESS);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        _failure.setValue(e);
-                        _uiState.setValue(UiState.ERROR);
+                        _failure.setValue(new Event(e));
+                        _uiState.postValue(UiState.ERROR);
                     }
 
                     @Override
@@ -75,7 +76,7 @@ public class MovieDetailsViewModel extends ViewModel {
         return _movieDetails;
     }
 
-    public LiveData<Throwable> getFailure() {
+    public LiveData<Event<Throwable>> getFailure() {
         return _failure;
     }
 

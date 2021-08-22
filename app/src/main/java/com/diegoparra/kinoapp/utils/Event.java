@@ -10,7 +10,7 @@ public class Event<T> {
         hasBeenHandled = false;
     }
 
-    public boolean isHasBeenHandled() {
+    public boolean hasBeenHandled() {
         return hasBeenHandled;
     }
 

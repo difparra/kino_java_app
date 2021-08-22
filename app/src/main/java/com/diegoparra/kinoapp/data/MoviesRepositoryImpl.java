@@ -4,6 +4,7 @@ import com.diegoparra.kinoapp.data.network.MovieResponseDto;
 import com.diegoparra.kinoapp.data.network.MoviesService;
 import com.diegoparra.kinoapp.model.Movie;
 import com.diegoparra.kinoapp.model.MovieDetails;
+import com.diegoparra.kinoapp.utils.Mapper;
 
 import java.util.List;
 
@@ -15,10 +16,12 @@ import io.reactivex.rxjava3.functions.Function;
 public class MoviesRepositoryImpl implements MoviesRepository {
 
     private final MoviesService moviesService;
+    private final Mapper<MovieResponseDto, List<Movie>> mapper;
 
     @Inject
-    public MoviesRepositoryImpl(MoviesService moviesService) {
+    public MoviesRepositoryImpl(MoviesService moviesService, Mapper<MovieResponseDto, List<Movie>> mapper) {
         this.moviesService = moviesService;
+        this.mapper = mapper;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class MoviesRepositoryImpl implements MoviesRepository {
         return moviesService.getMovies().map(new Function<MovieResponseDto, List<Movie>>() {
             @Override
             public List<Movie> apply(MovieResponseDto movieResponseDto) throws Throwable {
-                return movieResponseDto.toDomainMovieList();
+                return mapper.map(movieResponseDto);
             }
         });
     }

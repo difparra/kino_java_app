@@ -28,7 +28,7 @@ public class MoviesViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final MutableLiveData<UiState> _uiState = new MutableLiveData<>();
     private final MutableLiveData<List<Movie>> _movies = new MutableLiveData<>();
-    private final MutableLiveData<Throwable> _failure = new MutableLiveData<>();
+    private final MutableLiveData<Event<Throwable>> _failure = new MutableLiveData<>();
 
 
     @Inject
@@ -56,7 +56,7 @@ public class MoviesViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        _failure.setValue(e);
+                        _failure.setValue(new Event(e));
                         _uiState.setValue(UiState.ERROR);
                     }
 
@@ -74,7 +74,7 @@ public class MoviesViewModel extends ViewModel {
         return _movies;
     }
 
-    public LiveData<Throwable> getFailure() {
+    public LiveData<Event<Throwable>> getFailure() {
         return _failure;
     }
 
