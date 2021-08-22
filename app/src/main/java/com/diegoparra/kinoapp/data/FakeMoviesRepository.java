@@ -38,7 +38,7 @@ public class FakeMoviesRepository implements MoviesRepository {
     }
 
 
-    private static List<Movie> moviesList = new ArrayList<Movie>(
+    static List<Movie> moviesList = new ArrayList<Movie>(
             Arrays.asList(
                     new Movie("436969", Arrays.asList("28", "12", "14"), "https://image.tmdb.org/t/p/original/iCi4c4FvVdbaU1t8poH1gvzT6xM.jpg", "The Suicide Squad", 8.1f, LocalDate.of(2021, 7, 28)),
                     new Movie("451048", Arrays.asList("12", "14", "35", "28"), "https://image.tmdb.org/t/p/original/9dKCd55IuTT5QRs989m9Qlb7d2B.jpg", "Jungle Cruise", 7.9f, LocalDate.of(2021, 7, 28)),
@@ -54,7 +54,7 @@ public class FakeMoviesRepository implements MoviesRepository {
     );
 
 
-    private static MovieDetails movieDetails = new MovieDetails(
+    static MovieDetails movieDetails = new MovieDetails(
             "436969",
             Arrays.asList(new Genre("28", "Action"), new Genre("12", "Adventure"), new Genre("14", "Fantasy")),
             "en",

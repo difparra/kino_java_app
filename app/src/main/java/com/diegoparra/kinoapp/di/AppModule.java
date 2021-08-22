@@ -2,6 +2,7 @@ package com.diegoparra.kinoapp.di;
 
 import com.diegoparra.kinoapp.data.FakeMoviesRepository;
 import com.diegoparra.kinoapp.data.MoviesRepository;
+import com.diegoparra.kinoapp.data.MoviesRepositoryImpl;
 
 import dagger.Binds;
 import dagger.Module;
@@ -13,6 +14,6 @@ import dagger.hilt.components.SingletonComponent;
 public abstract class AppModule {
 
     @Binds
-    abstract MoviesRepository bindMoviesRepository(FakeMoviesRepository moviesRepository);
+    abstract MoviesRepository bindMoviesRepository(MoviesRepositoryImpl moviesRepository);
 
 }

@@ -54,6 +54,7 @@ public class MoviesFragment extends Fragment {
                 NavHostFragment.findNavController(MoviesFragment.this).navigate(navDirections);
             }
         });
+        binding.moviesList.setHasFixedSize(true);
         binding.moviesList.setAdapter(adapter);
 
         subscribeUi();
