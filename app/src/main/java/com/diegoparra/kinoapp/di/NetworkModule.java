@@ -4,17 +4,24 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.RequestBuilder;
 import com.diegoparra.kinoapp.BuildConfig;
+import com.diegoparra.kinoapp.data.network.MovieDto;
+import com.diegoparra.kinoapp.data.network.MovieResponseDto;
 import com.diegoparra.kinoapp.data.network.MoviesService;
+import com.diegoparra.kinoapp.data.network.mappers.MovieDtoMapper;
+import com.diegoparra.kinoapp.data.network.mappers.MovieResponseDtoMapper;
 import com.diegoparra.kinoapp.model.Movie;
+import com.diegoparra.kinoapp.utils.Mapper;
 
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Qualifier;
 import javax.inject.Singleton;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;

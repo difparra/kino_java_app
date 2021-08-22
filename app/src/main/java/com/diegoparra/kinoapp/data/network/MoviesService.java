@@ -2,6 +2,7 @@ package com.diegoparra.kinoapp.data.network;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface MoviesService {
 
@@ -9,5 +10,8 @@ public interface MoviesService {
 
     @GET("movie/popular")
     Observable<MovieResponseDto> getMovies();
+
+    @GET("movie/{id}")
+    Observable<MovieDetailsDto> getMovieDetails(@Path("id") String id);
 
 }

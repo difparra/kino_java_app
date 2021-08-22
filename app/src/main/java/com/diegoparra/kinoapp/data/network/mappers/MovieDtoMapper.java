@@ -1,32 +1,21 @@
-package com.diegoparra.kinoapp.data.network;
+package com.diegoparra.kinoapp.data.network.mappers;
 
+import com.diegoparra.kinoapp.data.network.MovieDto;
 import com.diegoparra.kinoapp.model.Movie;
-import com.diegoparra.kinoapp.utils.Function;
-import com.diegoparra.kinoapp.utils.ListUtils;
 import com.diegoparra.kinoapp.utils.Mapper;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 
 import javax.inject.Inject;
 
-public class MovieResponseDtoMapper implements Mapper<MovieResponseDto, List<Movie>> {
+public class MovieDtoMapper implements Mapper<MovieDto, Movie> {
 
     @Inject
-    public MovieResponseDtoMapper() { }
+    public MovieDtoMapper() { }
 
     @Override
-    public List<Movie> map(MovieResponseDto movieResponseDto) {
-        return ListUtils.map(movieResponseDto.getResults(), new Function<MovieDto, Movie>() {
-            @Override
-            public Movie apply(MovieDto movieDto) {
-                return toDomainModel(movieDto);
-            }
-        });
-    }
-
-    private Movie toDomainModel(MovieDto movieDto) {
+    public Movie map(MovieDto movieDto) {
         String nullableTitle = (movieDto.getOriginalLanguage().equals("en")) ? movieDto.getOriginalTitle() : movieDto.getTitle();
         return new Movie(
                 movieDto.getId(),
@@ -37,4 +26,5 @@ public class MovieResponseDtoMapper implements Mapper<MovieResponseDto, List<Mov
                 (movieDto.getReleaseDate() != null) ? LocalDate.parse(movieDto.getReleaseDate()) : LocalDate.MIN
         );
     }
+
 }
