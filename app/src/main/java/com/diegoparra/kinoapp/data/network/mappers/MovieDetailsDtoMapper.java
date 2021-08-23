@@ -30,6 +30,7 @@ public class MovieDetailsDtoMapper implements Mapper<MovieDetailsDto, MovieDetai
                 (movieDetailsDto.getGenres() != null) ? ListUtils.map(movieDetailsDto.getGenres(), genreMapper::map) : Collections.emptyList(),
                 (movieDetailsDto.getLanguage() != null) ? movieDetailsDto.getLanguage() : "en",
                 (nullableTitle != null) ? nullableTitle : "No title",
+                MovieDetailsDto.IMAGE_BASE_URL + movieDetailsDto.getPosterPath(),
                 MovieDetailsDto.IMAGE_BASE_URL + movieDetailsDto.getBackdropPath(),
                 (movieDetailsDto.getOverview() != null) ? movieDetailsDto.getOverview() : "No overview,",
                 (movieDetailsDto.getReleaseDate() != null) ? LocalDate.parse(movieDetailsDto.getReleaseDate()) : LocalDate.MIN,

@@ -1,5 +1,7 @@
 package com.diegoparra.kinoapp.model;
 
+import com.diegoparra.kinoapp.utils.ListUtils;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public class MovieDetails {
     private final List<Genre> genres;
     private final String language;
     private final String title;
+    private final String posterUrl;
     private final String backdropUrl;
     private final String overview;
     private final LocalDate releaseDate;
@@ -20,11 +23,12 @@ public class MovieDetails {
     private final List<Review> reviews;
 
 
-    public MovieDetails(String id, List<Genre> genres, String language, String title, String backdropUrl, String overview, LocalDate releaseDate, int runtime, float rating, People director, List<People> cast, List<Movie> suggestions, List<Review> reviews) {
+    public MovieDetails(String id, List<Genre> genres, String language, String title, String posterUrl, String backdropUrl, String overview, LocalDate releaseDate, int runtime, float rating, People director, List<People> cast, List<Movie> suggestions, List<Review> reviews) {
         this.id = id;
         this.genres = genres;
         this.language = language;
         this.title = title;
+        this.posterUrl = posterUrl;
         this.backdropUrl = backdropUrl;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -50,6 +54,10 @@ public class MovieDetails {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
     }
 
     public String getBackdropUrl() {
@@ -86,5 +94,17 @@ public class MovieDetails {
 
     public List<Review> getReviews() {
         return reviews;
+    }
+
+
+    public Movie toMovie() {
+        return new Movie(
+                id,
+                ListUtils.map(genres, Genre::getId),
+                posterUrl,
+                title,
+                rating,
+                releaseDate
+        );
     }
 }

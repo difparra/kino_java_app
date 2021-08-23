@@ -37,6 +37,21 @@ public class FakeMoviesRepository implements MoviesRepository {
         return Observable.just(moviesList.subList(2, 7));
     }
 
+    @Override
+    public Observable<Boolean> isFavouriteMovie(String id) {
+        //  TODO
+        return Observable.just(false);
+    }
+
+    @Override
+    public void addFavouriteMovie(Movie movie) {
+        //  TODO
+    }
+
+    @Override
+    public void deleteFavouriteMovie(String id) {
+        //  TODO
+    }
 
     static List<Movie> moviesList = new ArrayList<Movie>(
             Arrays.asList(
@@ -59,6 +74,7 @@ public class FakeMoviesRepository implements MoviesRepository {
             Arrays.asList(new Genre("28", "Action"), new Genre("12", "Adventure"), new Genre("14", "Fantasy")),
             "en",
             "The Suicide Squad",
+            "https://image.tmdb.org/t/p/original/iCi4c4FvVdbaU1t8poH1gvzT6xM.jpg",
             "https://image.tmdb.org/t/p/original/jlGmlFOcfo8n5tURmhC7YVd4Iyy.jpg",
             "Supervillains Harley Quinn, Bloodsport, Peacemaker and a collection of nutty cons at Belle Reve prison join the super-secret, super-shady Task Force X as they are dropped off at the remote, enemy-infused island of Corto Maltese.",
             LocalDate.of(2021, 7, 28),

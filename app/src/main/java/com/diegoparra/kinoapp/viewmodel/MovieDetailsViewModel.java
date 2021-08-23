@@ -1,5 +1,7 @@
 package com.diegoparra.kinoapp.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
@@ -9,6 +11,8 @@ import com.diegoparra.kinoapp.data.MoviesRepository;
 import com.diegoparra.kinoapp.model.MovieDetails;
 import com.diegoparra.kinoapp.utils.Event;
 import com.diegoparra.kinoapp.utils.UiState;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -23,13 +27,16 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 @HiltViewModel
 public class MovieDetailsViewModel extends ViewModel {
 
+    private static final String TAG = "MovieDetailsViewModel";
+
     private final String id;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final MoviesRepository moviesRepository;
     private final MutableLiveData<UiState> _uiState = new MutableLiveData<>();
     private final MutableLiveData<MovieDetails> _movieDetails = new MutableLiveData<>();
     private final MutableLiveData<Event<Throwable>> _failure = new MutableLiveData<>();
-
+    private final MutableLiveData<Boolean> _isFavourite = new MutableLiveData<>(false);
+    private final MutableLiveData<Event<Boolean>> _toastAddingRemovingFavourite = new MutableLiveData<>();
 
     @Inject
     public MovieDetailsViewModel(MoviesRepository moviesRepository, SavedStateHandle savedStateHandle) {
@@ -57,7 +64,7 @@ public class MovieDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        _failure.setValue(new Event(e));
+                        _failure.setValue(new Event<>(e));
                         _uiState.postValue(UiState.ERROR);
                     }
 
@@ -65,6 +72,46 @@ public class MovieDetailsViewModel extends ViewModel {
                     public void onComplete() {
                     }
                 });
+        moviesRepository.isFavouriteMovie(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Boolean aBoolean) {
+                        _isFavourite.setValue(aBoolean);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        _failure.setValue(new Event<>(e));
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    public void toggleFavouriteState() {
+        Log.d(TAG, "toggleFavouriteState() called");
+        if (_isFavourite.getValue() == null || _movieDetails.getValue() == null) {
+            Log.e(TAG, "toggleFavouriteState: Either _isFavourite or _movieDetails is null");
+            return;
+        }
+        if (_isFavourite.getValue()) {
+            Log.d(TAG, "isFavourite = true, calling delete favourite movie...");
+            moviesRepository.deleteFavouriteMovie(id);
+            _toastAddingRemovingFavourite.setValue(new Event<>(false));
+        } else {
+            Log.d(TAG, "isFavourite = false, calling add favourite movie...");
+            moviesRepository.addFavouriteMovie(_movieDetails.getValue().toMovie());
+            _toastAddingRemovingFavourite.setValue(new Event<>(true));
+        }
     }
 
 
@@ -76,8 +123,16 @@ public class MovieDetailsViewModel extends ViewModel {
         return _movieDetails;
     }
 
+    public LiveData<Boolean> isFavourite() {
+        return _isFavourite;
+    }
+
     public LiveData<Event<Throwable>> getFailure() {
         return _failure;
+    }
+
+    public LiveData<Event<Boolean>> getToastAddingRemovingFavourite() {
+        return _toastAddingRemovingFavourite;
     }
 
     @Override

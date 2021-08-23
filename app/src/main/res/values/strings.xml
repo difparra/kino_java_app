@@ -4,10 +4,15 @@
     <string name="menu_movies">Películas</string>
     <string name="menu_favourites">Favoritos</string>
 
-    <string name="movie_overview">Overview</string>
+    <string name="movie_overview">Resumen</string>
     <string name="movie_director">Director</string>
     <string name="movie_casting">Casting</string>
-    <string name="movie_reviews">Reviews</string>
-    <string name="movie_suggestions">Suggestions</string>
+    <string name="movie_reviews">Reseñas</string>
+    <string name="movie_suggestions">Sugerencias</string>
+
+    <string name="adding_to_favourites">Agregado a favoritos</string>
+    <string name="deleting_from_favourites">Eliminado de favoritos</string>
+
+    <string name="undo">UNDO</string>
 
 </resources>

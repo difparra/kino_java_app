@@ -12,5 +12,8 @@ public interface MoviesRepository {
     Observable<List<Movie>> getMovies();
     Observable<MovieDetails> getMovieDetails(String id);
     Observable<List<Movie>> getFavouriteMovies();
+    Observable<Boolean> isFavouriteMovie(String id);
+    void addFavouriteMovie(Movie movie);
+    void deleteFavouriteMovie(String id);
 
 }
